@@ -1,30 +1,28 @@
-import {
-  bigint,
-  boolean,
-  index,
-  pgTable,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core"
+import { nanoid } from "nanoid"
+import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
-export const todos = pgTable(
-  "todos",
+export const bots = pgTable(
+  "bots",
   {
-    id: bigint("id", { mode: "number" })
+    id: text("id")
       .primaryKey()
-      .generatedAlwaysAsIdentity(),
+      .$defaultFn(() => nanoid()),
     // Clerk user ID of the owner.
     userId: text("user_id").notNull(),
-    title: text("title").notNull(),
-    completed: boolean("completed").notNull().default(false),
+    name: text("name").notNull(),
+    // Seed for the bot's generated face.
+    avatar: text("avatar")
+      .notNull()
+      .$defaultFn(() => nanoid()),
+    // What the bot is for, in a phrase.
+    job: text("job").notNull(),
+    // How it should go about the job.
+    instructions: text("instructions"),
+    // Third-party sandbox ID, created lazily.
+    sandboxId: text("sandbox_id"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
-    // Refreshed by Drizzle on db.update(); raw SQL updates don't touch it.
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .notNull()
-      .defaultNow()
-      .$onUpdate(() => new Date()),
   },
-  (table) => [index("todos_user_id_idx").on(table.userId)]
+  (table) => [index("bots_user_id_idx").on(table.userId)]
 )
