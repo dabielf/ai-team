@@ -19,6 +19,20 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - The schema lives in `lib/db/schema.ts`; edit it, then push.
 - This is a development project. There is no backwards compatibility and the data is worthless. Prefer data loss: never backfill, migrate, or preserve existing rows, and never spend effort on keeping old data working. Every schema change means a clean slate.
 
+## Forms
+
+One schema validates a form on both sides. Reference implementation: `components/bot-dialog.tsx`, `actions/bot.ts`, `insertBotSchema` in `lib/db/schema.ts`.
+
+- **Schema**: in `lib/db/schema.ts`, next to its table. `createInsertSchema(table, { refinements })` from `drizzle-zod`, then `.pick()` only the fields the user edits. Server-set fields (`userId`, `id`, timestamps) stay out. Export the inferred type (`InsertBot`).
+- **Server action**: `actions/<entity>.ts` with `"use server"`. Take `userId` from `await auth.protect()`, `safeParse` the input with the same schema, write with Drizzle, `revalidatePath`, return `{ id }` or `{ error }`.
+- **Component**: `components/<entity>-dialog.tsx`, a client component following the shadcn React Hook Form guide (https://ui.shadcn.com/docs/forms/react-hook-form.md):
+  - `useForm` with `zodResolver(<schema>)`; one `Controller` per field rendering `Field data-invalid` + control `aria-invalid` + `FieldError`.
+  - Read live values with `useWatch` (`form.watch` trips the `react-hooks/incompatible-library` lint).
+  - Client-generated values (avatar seeds) live in form state, changed with `form.setValue`.
+  - Give the `<form>` an `id`; the submit button sits in `DialogFooter` with `form="<id>"`, `disabled` and a `Spinner` while `formState.isSubmitting`.
+  - Feedback with `toast.add` from `@/components/ui/toast` (Base UI). On success: toast, close the dialog, reset the form.
+- **Install**: add packages with `npm install --legacy-peer-deps`; `@hookform/resolvers` pulls an optional zod 3 peer that breaks plain installs.
+
 ## DiceBear
 
 Use DiceBear 10. Documentation: https://www.dicebear.com/llms.txt
