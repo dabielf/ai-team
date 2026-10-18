@@ -17,6 +17,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Never create branches, worktrees, or commits automatically. Only do so when the user explicitly asks for that specific action in the current request.
 - Leave changes uncommitted in the working tree on the current branch and let the user decide when and how to commit.
 
+## Vercel
+
+- Every push to `main` deploys, and a deploy only gets the environment variables that existed when it started.
+- When a change needs a new environment variable, add it to Vercel (`vercel env add`, all environments) before pushing that change. Otherwise the deploy runs without it and has to be redeployed.
+
 ## Database
 
 - Apply schema changes only with `npm run db:push` (`drizzle-kit push`). Never use migrations: no `drizzle-kit generate`, no `drizzle-kit migrate`, no migration files or folders.
