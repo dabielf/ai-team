@@ -1,4 +1,3 @@
-import { UserButton } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
 
 import { BotDialog } from "@/components/bot-dialog"
@@ -16,9 +15,6 @@ export default async function Page() {
 
   return (
     <div className="flex min-h-svh flex-col gap-6 p-6">
-      <header className="flex items-center justify-end gap-2">
-        <UserButton />
-      </header>
       <Empty>
         <EmptyHeader>
           <ChatAvatar seed={crypto.randomUUID()} />
