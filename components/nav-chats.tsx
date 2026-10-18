@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { formatDistanceToNowStrict } from "date-fns"
 
 import { ChatAvatar } from "@/components/chat-avatar"
@@ -19,7 +20,11 @@ export async function NavChats() {
         <SidebarMenu>
           {chats.map((chat) => (
             <SidebarMenuItem key={chat.id}>
-              <SidebarMenuButton size="lg">
+              <SidebarMenuButton
+                size="lg"
+                tooltip={chat.name ?? chat.bot?.name}
+                render={<Link href={`/chats/${chat.id}`} />}
+              >
                 <ChatAvatar seed={chat.bot?.avatar ?? chat.id} />
                 <div className="grid flex-1 text-left leading-tight">
                   <div className="flex items-baseline justify-between gap-2">

@@ -20,16 +20,24 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarRail,
   sidebarMenuButtonVariants,
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 
 // children: the sidebar content, rendered on the server (see NavChats).
-export function AppSidebar({ children }: { children?: React.ReactNode }) {
+// search: the search button, rendered on the server (see NavSearch).
+export function AppSidebar({
+  search,
+  children,
+}: {
+  search?: React.ReactNode
+  children?: React.ReactNode
+}) {
   const [botDialogOpen, setBotDialogOpen] = React.useState(false)
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu className="items-end">
           <SidebarMenuItem>
@@ -56,6 +64,7 @@ export function AppSidebar({ children }: { children?: React.ReactNode }) {
             <BotDialog open={botDialogOpen} onOpenChange={setBotDialogOpen} />
           </SidebarMenuItem>
         </SidebarMenu>
+        {search}
       </SidebarHeader>
       <SidebarContent>{children}</SidebarContent>
       <SidebarFooter>
@@ -68,17 +77,19 @@ export function AppSidebar({ children }: { children?: React.ReactNode }) {
                   rootBox: "w-full",
                   userButtonTrigger: cn(
                     sidebarMenuButtonVariants({ size: "lg" }),
-                    "justify-start"
+                    "justify-start group-data-[collapsible=icon]:justify-center"
                   ),
                   userButtonBox: "flex-row-reverse gap-3",
                   userButtonAvatarBox: "size-6",
-                  userButtonOuterIdentifier: "truncate p-0 text-sm",
+                  userButtonOuterIdentifier:
+                    "truncate p-0 text-sm group-data-[collapsible=icon]:hidden",
                 },
               }}
             />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   )
 }
