@@ -1,12 +1,11 @@
-import Link from "next/link"
 import { formatDistanceToNowStrict } from "date-fns"
 
 import { ChatAvatar } from "@/components/chat-avatar"
+import { NavChatButton } from "@/components/nav-chat-button"
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { getChats } from "@/queries/bots"
@@ -20,10 +19,9 @@ export async function NavChats() {
         <SidebarMenu>
           {chats.map((chat) => (
             <SidebarMenuItem key={chat.id}>
-              <SidebarMenuButton
-                size="lg"
+              <NavChatButton
+                chatId={chat.id}
                 tooltip={chat.name ?? chat.bot?.name}
-                render={<Link href={`/chats/${chat.id}`} />}
               >
                 <ChatAvatar seed={chat.bot?.avatar ?? chat.id} />
                 <div className="grid flex-1 text-left leading-tight">
@@ -39,7 +37,7 @@ export async function NavChats() {
                     {chat.lastMessagePreview}
                   </span>
                 </div>
-              </SidebarMenuButton>
+              </NavChatButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
