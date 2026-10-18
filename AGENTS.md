@@ -21,6 +21,13 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - Every push to `main` deploys, and a deploy only gets the environment variables that existed when it started.
 - When a change needs a new environment variable, add it to Vercel (`vercel env add`, all environments) before pushing that change. Otherwise the deploy runs without it and has to be redeployed.
+- Check with `vercel env ls`; a variable in `.env.local` is not on Vercel until listed there.
+
+## Trigger.dev
+
+- Tasks in `trigger/` run on Trigger.dev, not Vercel. Variables they read (like `OPENROUTER_API_KEY`) go in the Trigger.dev project's environment variables. Locally, `trigger dev` reads `.env.local`.
+- The Next.js app calls Trigger.dev with `TRIGGER_SECRET_KEY`. On Vercel it holds the **prod** key (`tr_prod_…`); `.env.local` holds the dev key.
+- A push to `main` does not deploy tasks. After changing `trigger/`, run `pnpm dlx trigger.dev@latest deploy`.
 
 ## Database
 
