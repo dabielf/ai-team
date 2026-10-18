@@ -61,8 +61,15 @@ function emptyBot(): InsertBot {
   return { name: "", avatar: crypto.randomUUID(), job: "", instructions: "" }
 }
 
-export function BotDialog() {
-  const [open, setOpen] = React.useState(false)
+// Pass open/onOpenChange to control it from elsewhere (no trigger rendered).
+export function BotDialog(props: {
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+}) {
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false)
+  const controlled = props.open !== undefined
+  const open = controlled ? props.open : uncontrolledOpen
+  const setOpen = props.onOpenChange ?? setUncontrolledOpen
   const form = useForm<InsertBot>({
     resolver: zodResolver(insertBotSchema),
     defaultValues: emptyBot(),
@@ -82,10 +89,12 @@ export function BotDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button variant="secondary" />}>
-        <PlusIcon data-icon="inline-start" />
-        Create a new bot
-      </DialogTrigger>
+      {!controlled && (
+        <DialogTrigger render={<Button variant="secondary" />}>
+          <PlusIcon data-icon="inline-start" />
+          Create a new bot
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>New bot</DialogTitle>

@@ -8,6 +8,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+## Frontend
+
+- Before any frontend change, use the /shadcn skill if it isn't already loaded in the session
+
 ## Git
 
 - Never create branches, worktrees, or commits automatically. Only do so when the user explicitly asks for that specific action in the current request.

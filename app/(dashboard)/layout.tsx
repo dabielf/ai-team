@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import { NavChats } from "@/components/nav-chats"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
 export default function DashboardLayout({
@@ -8,7 +9,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar>
+        <NavChats />
+      </AppSidebar>
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   )
