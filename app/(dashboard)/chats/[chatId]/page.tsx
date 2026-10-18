@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 
+import { Chat } from "@/components/chat"
 import { ChatHeader } from "@/components/chat-header"
 import { getChat } from "@/queries/chats"
 
@@ -12,12 +13,13 @@ export default async function Page(props: PageProps<"/chats/[chatId]">) {
   if (!chat) notFound()
 
   return (
-    <div className="flex min-h-svh flex-col">
+    <div className="flex h-svh flex-col">
       <ChatHeader
         name={chat.name ?? chat.bot?.name ?? "Chat"}
         avatar={chat.bot?.avatar ?? chat.id}
         bot={chat.bot}
       />
+      <Chat id={chat.id} />
     </div>
   )
 }
